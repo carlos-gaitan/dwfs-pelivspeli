@@ -1,5 +1,10 @@
 // Esta es la ip y puerto en que necesitamos que esté el backend disponible
-var server = 'http://0.0.0.0:8080';
+
+
+// FIXME: con 0.0.0.0 lo blokea cors
+//var server = 'http://0.0.0.0:8080';
+var server = 'http://localhost:8080';
+
 
 function CompetenciasController () {
 
@@ -18,6 +23,7 @@ function CompetenciasController () {
 	this.cargarCompetencias = function (data){
 		// data es el listado de competencias que retornó la api (un objeto json)
 
+
 		// Oculto la plantilla
 		$(".competenciaPlantilla").hide();
 		// Se recorren iterativamente, uno a uno, los resultados de competencias
@@ -34,7 +40,7 @@ function CompetenciasController () {
 			// Se coloca el nombre de cada competencia
 			$(divCompetencia).find('.titulo').text(data[i].nombre);
 			$(divCompetencia).find('.card').addClass('color'+idColor);
-			
+
 			if (idColorCrece){
 				idColor++;
 			} else {

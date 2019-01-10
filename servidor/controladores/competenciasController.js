@@ -5,7 +5,9 @@ function obtenerCompetencias(req, res) {
     if (error){
       return res.status(500).json("error en el servidor");
     }
-    res.json({ competencias: resultadoQuery });
+    res.json(resultadoQuery);
+    //res.json({ competencias: resultadoQuery });
+    //res.send(JSON.stringify(resultadoQuery));
   });
 
 };
