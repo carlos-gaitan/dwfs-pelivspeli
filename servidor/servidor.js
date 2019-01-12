@@ -20,6 +20,10 @@ app.use(bodyParser.json());
 
 //routing
 app.get('/competencias', competenciasController.obtenerCompetencias);
+app.get('/competencias/:id/peliculas', competenciasController.obtenerOpciones);
+app.post('/competencias/:id/voto', competenciasController.votar);
+app.get('/competencias/:id/resultados', competenciasController.obtenerResultados);
+
 // app.get('/generos', generosController.obtenerGeneros);
 // app.get('/peliculas/:id/', peliculasController.obtenerInfoPelicula);
 // app.get('/recomendacion', peliculasController.obtenerPeliculaRecomendada);

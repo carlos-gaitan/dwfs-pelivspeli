@@ -3,7 +3,6 @@ CREATE DATABASE `competencias`;
 USE `competencias`;
 
 DROP TABLE IF EXISTS `actor`;
-
 CREATE TABLE `actor` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `nombre` varchar(70) NOT NULL DEFAULT '',
@@ -17,7 +16,6 @@ UNLOCK TABLES;
 
 
 DROP TABLE IF EXISTS `genero`;
-
 CREATE TABLE `genero` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `nombre` varchar(30) NOT NULL DEFAULT '',
@@ -29,7 +27,6 @@ INSERT INTO `genero` VALUES (1,'Acción'),(2,'Aventura'),(3,'Animadas'),(4,'Biog
 UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `pelicula`;
-
 CREATE TABLE `pelicula` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `titulo` varchar(300) DEFAULT '',
@@ -53,7 +50,6 @@ UNLOCK TABLES;
 
 
 DROP TABLE IF EXISTS `actor_pelicula`;
-
 CREATE TABLE `actor_pelicula` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `actor_id` int(11) unsigned NOT NULL,
@@ -99,7 +95,6 @@ INSERT INTO `director_pelicula` VALUES (1,3199,1),(2,3200,2),(3,3201,3),(242,320
 UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `competencia`;
-
 CREATE TABLE `competencia` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `nombre` varchar(70) NOT NULL DEFAULT '',
@@ -107,4 +102,19 @@ CREATE TABLE `competencia` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 LOCK TABLES `competencia` WRITE;
-INSERT INTO `competencia` VALUES (1,'¿Cuál es la mejor película?'),(2,'¿Qué drama te hizo llorar más?'),(3,'¿Cuál es la peli más bizarra?') ;
+INSERT INTO `competencia` VALUES (1,'¿Cuál es la mejor película?'),(2,'¿Qué drama te hizo llorar más?'),(3,'¿Cuál es la peli más bizarra?');
+UNLOCK TABLES;
+
+DROP TABLE IF EXISTS `voto`;
+CREATE TABLE `voto` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `pelicula_id` int(11) unsigned NOT NULL,
+  `competencia_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (`pelicula_id`) REFERENCES `pelicula` (`id`),
+  FOREIGN KEY (`competencia_id`) REFERENCES `competencia` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+LOCK TABLES `voto` WRITE;
+INSERT INTO `voto` VALUES (1,2,3),(2,2,1),(3,4,3),(4,4,3),(5,8,3),(6,8,3),(7,2,3);
+UNLOCK TABLES;
