@@ -23,7 +23,7 @@ Competencia.votar = function(idCompetencia, idPelicula, cb){
 };
 
 Competencia.obtenerResultados = function(idCompetencia, cb){
-  var consultaSql = "";
+  var consultaSql = `SELECT pelicula_id, COUNT(*) AS votos, pelicula.poster, pelicula.titulo, competencia.nombre FROM voto JOIN competencia ON voto.competencia_id = competencia.id JOIN pelicula ON voto.pelicula_id = pelicula.id WHERE voto.competencia_id = ${idCompetencia} GROUP BY competencia_id, pelicula_id HAVING COUNT(*) >= 1 ORDER BY votos DESC LIMIT 3`;
   conexion.query(consultaSql, cb);
 };
 
