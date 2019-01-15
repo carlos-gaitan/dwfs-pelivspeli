@@ -27,4 +27,25 @@ Competencia.obtenerResultados = function(idCompetencia, cb){
   conexion.query(consultaSql, cb);
 };
 
+Competencia.obtenerGeneros = function(cb){
+  var consultaSql = "SELECT * from genero";
+  conexion.query(consultaSql, cb);
+};
+
+Competencia.obtenerDirectores = function(cb){
+  var consultaSql = "SELECT * from director";
+  conexion.query(consultaSql, cb);
+};
+
+Competencia.obtenerActores = function(cb){
+  var consultaSql = "SELECT * from actor";
+  conexion.query(consultaSql, cb);
+};
+
+Competencia.agregarCompetencia = function(competenciaInfo, cb){
+  var consultaSql = `INSERT INTO competencia (nombre, genero_id, director_id, actor_id) VALUES (${competenciaInfo.nombre}, ${competenciaInfo.genero}, ${competenciaInfo.director}, ${competenciaInfo.actor})`;
+  console.log(consultaSql);
+  conexion.query(consultaSql, cb);
+};
+
 module.exports = Competencia;

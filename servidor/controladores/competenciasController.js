@@ -6,8 +6,6 @@ function obtenerCompetencias(req, res) {
       return res.status(500).json("error en el servidor");
     }
     res.json(resultadoQuery);
-    //res.json({ competencias: resultadoQuery });
-    //res.send(JSON.stringify(resultadoQuery));
   });
 };
 
@@ -23,9 +21,7 @@ function obtenerCompetencias(req, res) {
         if (resultadoNombreCompetencia.length == 0){
           return res.status(404).json("No se encontro ninguna competencia con ese id");
         };
-        res.json({ peliculas: resultadoOpciones, competencia: resultadoNombreCompetencia[0].nombre  });
-        //res.json({ competencias: resultadoQuery });
-        //res.send(JSON.stringify(resultadoQuery));
+        res.json({ peliculas: resultadoOpciones, competencia: resultadoNombreCompetencia[0].nombre });
       });
     });
   };
@@ -36,7 +32,6 @@ function obtenerCompetencias(req, res) {
           return res.status(500).json("error en el servidor");
         };
         res.status(200).json("votacion efectuada satisfactoriamente");
-
     });
   };
 
@@ -48,12 +43,10 @@ function obtenerCompetencias(req, res) {
       if (resultadoQuery.length == 0){
         return res.status(404).json("No se encontro ninguna competencia con ese id");
       };
-
       var objetoQuery = {
 				    competencia:resultadoQuery[0].nombre,
 				    resultados:[],
-			    }
-
+			    };
 			resultadoQuery.forEach(function(element, index){
 				var objetoResultado = {
 					pelicula_id: resultadoQuery[index].pelicula_id,
@@ -64,8 +57,49 @@ function obtenerCompetencias(req, res) {
 				objetoQuery.resultados.push(objetoResultado);
 		  });
       res.json(objetoQuery);
-      // res.json({ competencias: resultadoQuery });
-      // res.send(JSON.stringify(resultadoQuery));
+    });
+  };
+
+  function obtenerGeneros(req, res) {
+    Competencia.obtenerGeneros(function(error, resultadoQuery){
+      if (error){
+        return res.status(500).json("error en el servidor");
+      }
+      res.json(resultadoQuery);
+    });
+  };
+
+  function obtenerDirectores(req, res) {
+    Competencia.obtenerDirectores(function(error, resultadoQuery){
+      if (error){
+        return res.status(500).json("error en el servidor");
+      }
+      res.json(resultadoQuery);
+    });
+  };
+
+  function obtenerActores(req, res) {
+    Competencia.obtenerActores(function(error, resultadoQuery){
+      if (error){
+        return res.status(500).json("error en el servidor");
+      }
+      res.json(resultadoQuery);
+    });
+  };
+
+  function agregarCompetencia(req, res){
+    var competenciaInfo = {
+      nombre: req.body.nombre,
+      genero: req.body.genero === '0' ? null : req.body.genero,
+      director: req.body.director === '0' ? null : req.body.director,
+      actor: req.body.actor === '0' ? null : req.body.actor
+    };
+    console.log(competenciaInfo);
+    Competencia.agregarCompetencia(competenciaInfo, function(error, resultadoQuery){
+        if (error) {
+          return res.status(500).json("error en el servidor");
+        };
+        res.status(200).json("la competencia se agrego satisfactoriamente");
     });
   };
 
@@ -74,5 +108,9 @@ module.exports = {
   obtenerCompetencias: obtenerCompetencias,
   obtenerOpciones: obtenerOpciones,
   votar: votar,
-  obtenerResultados: obtenerResultados
+  obtenerResultados: obtenerResultados,
+  obtenerGeneros: obtenerGeneros,
+  obtenerDirectores: obtenerDirectores,
+  obtenerActores: obtenerActores,
+  agregarCompetencia: agregarCompetencia
 };
