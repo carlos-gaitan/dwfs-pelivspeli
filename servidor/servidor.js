@@ -28,6 +28,8 @@ app.get('/competencias/:id/resultados', competenciasController.obtenerResultados
 app.get('/generos', competenciasController.obtenerGeneros);
 app.get('/directores', competenciasController.obtenerDirectores);
 app.get('/actores', competenciasController.obtenerActores);
+app.delete('/competencias/:id/votos', competenciasController.eliminarVotos);
+
 
 // app.get('/generos', generosController.obtenerGeneros);
 // app.get('/peliculas/:id/', peliculasController.obtenerInfoPelicula);

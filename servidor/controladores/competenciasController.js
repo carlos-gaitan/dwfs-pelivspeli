@@ -88,21 +88,37 @@ function obtenerCompetencias(req, res) {
   };
 
   function agregarCompetencia(req, res){
-    var competenciaInfo = {
-      nombre: req.body.nombre,
-      genero: req.body.genero === '0' ? null : req.body.genero,
-      director: req.body.director === '0' ? null : req.body.director,
-      actor: req.body.actor === '0' ? null : req.body.actor
-    };
-    console.log(competenciaInfo);
-    Competencia.agregarCompetencia(competenciaInfo, function(error, resultadoQuery){
+    Competencia.verificaExistenciaCompetencia(req.body.nombre, function(error, resultadoQueryUno){
+      if (error){
+        return res.status(500).json("error en el servidor");
+      };
+      if (resultadoQueryUno.length > 0) {
+        return res.status(422).json("Ya existe una competencia con ese nombre");
+      };
+      var competenciaInfo = {
+        nombre: req.body.nombre,
+        genero: req.body.genero === '0' ? null : req.body.genero,
+        director: req.body.director === '0' ? null : req.body.director,
+        actor: req.body.actor === '0' ? null : req.body.actor
+      };
+      Competencia.agregarCompetencia(competenciaInfo, function(error, resultadoQuery){
         if (error) {
           return res.status(500).json("error en el servidor");
         };
         res.status(200).json("la competencia se agrego satisfactoriamente");
+      });
     });
   };
 
+  function eliminarVotos(req, res){
+    Competencia.eliminarVotos(competenciaInfo, function(error, resultadoQuery){
+      if (error) {
+        return res.status(500).json("error en el servidor");
+      };
+      res.status(200).json("la competencia se agrego satisfactoriamente");
+    });
+
+  });
 
 module.exports = {
   obtenerCompetencias: obtenerCompetencias,
@@ -112,5 +128,6 @@ module.exports = {
   obtenerGeneros: obtenerGeneros,
   obtenerDirectores: obtenerDirectores,
   obtenerActores: obtenerActores,
-  agregarCompetencia: agregarCompetencia
+  agregarCompetencia: agregarCompetencia,
+  eliminarVotos: eliminarVotos
 };

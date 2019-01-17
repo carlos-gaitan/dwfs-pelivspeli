@@ -4,14 +4,17 @@ var Competencia = function(id, nombre){
   this.id = id;
   this.nombre = nombre;
 };
+
 Competencia.obtenerTodas = function(cb){
   var consultaSql = "SELECT * from competencia";
   conexion.query(consultaSql, cb);
 };
+
 Competencia.obtenerOpciones = function(cb){
   var consultaSql = "SELECT id, poster, titulo from pelicula ORDER BY RAND() LIMIT 2";
   conexion.query(consultaSql, cb);
 };
+
 Competencia.obtenerNombreCompetencia = function(id, cb){
   var consultaSql = `SELECT nombre FROM competencia WHERE id = ${id}`;
   conexion.query(consultaSql, cb);
@@ -43,8 +46,19 @@ Competencia.obtenerActores = function(cb){
 };
 
 Competencia.agregarCompetencia = function(competenciaInfo, cb){
-  var consultaSql = `INSERT INTO competencia (nombre, genero_id, director_id, actor_id) VALUES (${competenciaInfo.nombre}, ${competenciaInfo.genero}, ${competenciaInfo.director}, ${competenciaInfo.actor})`;
+  var consultaSql = `INSERT INTO competencia (nombre, genero_id, director_id, actor_id) VALUES ('${competenciaInfo.nombre}', ${competenciaInfo.genero}, ${competenciaInfo.director}, ${competenciaInfo.actor})`;
+  //var consultaSql = `INSERT INTO competencia (nombre) VALUES ('${competenciaInfo.nombre}')`;
   console.log(consultaSql);
+  conexion.query(consultaSql, cb);
+};
+
+Competencia.verificaExistenciaCompetencia = function(nombre, cb){
+  var consultaSql = `SELECT nombre FROM competencia WHERE nombre = '${nombre}'`;
+  conexion.query(consultaSql, cb);
+};
+
+Competencia.eliminarVotos = function(idCompetencia, cb){
+  var consultaSql = `DELETE FROM voto WHERE competencia_id = ${idCompetencia}`;
   conexion.query(consultaSql, cb);
 };
 

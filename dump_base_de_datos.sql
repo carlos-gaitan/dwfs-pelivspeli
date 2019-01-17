@@ -98,11 +98,17 @@ DROP TABLE IF EXISTS `competencia`;
 CREATE TABLE `competencia` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `nombre` varchar(70) NOT NULL DEFAULT '',
-  PRIMARY KEY (`id`)
+  `genero_id` INT (11) UNSIGNED,
+  `director_id` INT (11) UNSIGNED,
+  `actor_id` INT (11) UNSIGNED,
+  PRIMARY KEY (`id`),
+  FOREIGN KEY (genero_id) REFERENCES genero(id),
+  FOREIGN KEY (director_id) REFERENCES director(id),
+  FOREIGN KEY (actor_id) REFERENCES actor(id)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 LOCK TABLES `competencia` WRITE;
-INSERT INTO `competencia` VALUES (1,'¿Cuál es la mejor película?'),(2,'¿Qué drama te hizo llorar más?'),(3,'¿Cuál es la peli más bizarra?');
+INSERT INTO `competencia` VALUES (1,'¿Cuál es la mejor película?',null,null,null),(2,'¿Qué drama te hizo llorar más?',null,null,null),(3,'¿Cuál es la peli más bizarra?',null,null,null);
 UNLOCK TABLES;
 
 DROP TABLE IF EXISTS `voto`;
