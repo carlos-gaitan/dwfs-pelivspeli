@@ -8,7 +8,6 @@ var app = express();
 
 //controllers
 var competenciasController = require('./controladores/competenciasController');
-//var generosController = require('./controladores/generosController');
 
 app.use(cors());
 
@@ -32,14 +31,6 @@ app.delete('/competencias/:id/votos', competenciasController.eliminarVotos);
 app.delete('/competencias/:id', competenciasController.eliminarCompetencia);
 app.get('/competencias/:id', competenciasController.obtenerInfoCompetencia);
 app.put('/competencias/:id', competenciasController.editarCompetencia);
-
-
-
-
-// app.get('/generos', generosController.obtenerGeneros);
-// app.get('/peliculas/:id/', peliculasController.obtenerInfoPelicula);
-// app.get('/recomendacion', peliculasController.obtenerPeliculaRecomendada);
-
 
 //seteamos el puerto en el cual va a escuchar los pedidos la aplicación
 var puerto = 8080;
