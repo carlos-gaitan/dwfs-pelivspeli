@@ -29,6 +29,11 @@ app.get('/generos', competenciasController.obtenerGeneros);
 app.get('/directores', competenciasController.obtenerDirectores);
 app.get('/actores', competenciasController.obtenerActores);
 app.delete('/competencias/:id/votos', competenciasController.eliminarVotos);
+app.delete('/competencias/:id', competenciasController.eliminarCompetencia);
+app.get('/competencias/:id', competenciasController.obtenerInfoCompetencia);
+app.put('/competencias/:id', competenciasController.editarCompetencia);
+
+
 
 
 // app.get('/generos', generosController.obtenerGeneros);

@@ -118,7 +118,7 @@ CREATE TABLE `voto` (
   `competencia_id` int(11) unsigned NOT NULL,
   PRIMARY KEY (`id`),
   FOREIGN KEY (`pelicula_id`) REFERENCES `pelicula` (`id`),
-  FOREIGN KEY (`competencia_id`) REFERENCES `competencia` (`id`)
+  FOREIGN KEY (`competencia_id`) REFERENCES `competencia` (`id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 LOCK TABLES `voto` WRITE;

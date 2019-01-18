@@ -111,14 +111,51 @@ function obtenerCompetencias(req, res) {
   };
 
   function eliminarVotos(req, res){
-    Competencia.eliminarVotos(competenciaInfo, function(error, resultadoQuery){
+    Competencia.eliminarVotos(req.params.id, function(error, resultadoQuery){
       if (error) {
         return res.status(500).json("error en el servidor");
       };
-      res.status(200).json("la competencia se agrego satisfactoriamente");
+      res.status(200).json("los votos se eliminaron satisfactoriamente");
     });
+  };
 
+  function obtenerInfoCompetencia(req, res){
+    Competencia.obtenerInfoCompetencia(req.params.id, function(error, resultadoQuery){
+      if (error) {
+        return res.status(500).json("error en el servidor");
+      };
+      var objetoResultadoQuery = {
+                'id': resultadoQuery[0].id,
+                'nombre': resultadoQuery[0].nombre,
+                'genero_nombre': resultadoQuery[0].genero,
+                'actor_nombre': resultadoQuery[0].actor,
+                'director_nombre': resultadoQuery[0].director
+            }
+      res.json(objetoResultadoQuery);
+    });
+  };
+
+function eliminarCompetencia(req, res){
+  Competencia.eliminarCompetencia(req.params.id, function(error, resultadoQuery){
+    if (error) {
+      return res.status(500).json("error en el servidor");
+    };
+    res.status(200).json("la competencia se elimino satisfactoriamente");
   });
+};
+
+function editarCompetencia(req, res){
+  var nuevaInfo = {
+    idCompetencia: req.params.id,
+	  nuevoNombre: req.body.nombre
+  };
+  Competencia.editarCompetencia(nuevaInfo, function(error, resultadoQuery){
+    if (error) {
+      return res.status(500).json("error en el servidor");
+    };
+    res.status(200).json("la competencia se edito satisfactoriamente");
+  });
+};
 
 module.exports = {
   obtenerCompetencias: obtenerCompetencias,
@@ -129,5 +166,8 @@ module.exports = {
   obtenerDirectores: obtenerDirectores,
   obtenerActores: obtenerActores,
   agregarCompetencia: agregarCompetencia,
-  eliminarVotos: eliminarVotos
+  eliminarVotos: eliminarVotos,
+  obtenerInfoCompetencia: obtenerInfoCompetencia,
+  eliminarCompetencia: eliminarCompetencia,
+  editarCompetencia: editarCompetencia
 };

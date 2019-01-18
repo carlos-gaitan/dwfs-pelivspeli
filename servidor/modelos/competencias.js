@@ -61,5 +61,19 @@ Competencia.eliminarVotos = function(idCompetencia, cb){
   var consultaSql = `DELETE FROM voto WHERE competencia_id = ${idCompetencia}`;
   conexion.query(consultaSql, cb);
 };
+//SELECT competencia.id, competencia.nombre, genero.nombre genero, director.nombre director, actor.nombre actor FROM competencia LEFT JOIN genero ON genero_id = genero.id LEFT JOIN director ON director_id= director.id LEFT JOIN actor ON actor_id= actor.id WHERE competencia.id = " + nombreCompetencia;
+Competencia.obtenerInfoCompetencia = function(idCompetencia, cb){
+  var consultaSql = `SELECT competencia.id, competencia.nombre, genero.nombre genero, director.nombre director, actor.nombre actor FROM competencia LEFT JOIN genero ON genero_id = genero.id LEFT JOIN director ON director_id = director.id LEFT JOIN actor ON actor_id = actor.id WHERE competencia.id = ${idCompetencia}`;
+  conexion.query(consultaSql, cb);
+};
+
+Competencia.eliminarCompetencia = function(idCompetencia, cb){
+  var consultaSql = `DELETE FROM competencia WHERE id = ${idCompetencia}`;
+  conexion.query(consultaSql, cb);
+};
+Competencia.editarCompetencia = function(nuevaInfo, cb){
+  var consultaSql = `UPDATE competencia SET nombre = '${nuevaInfo.nuevoNombre}' WHERE id = ${nuevaInfo.idCompetencia}`;
+  conexion.query(consultaSql, cb);
+};
 
 module.exports = Competencia;
