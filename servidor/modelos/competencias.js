@@ -57,6 +57,16 @@ Competencia.verificaExistenciaCompetencia = function(nombre, cb){
   conexion.query(consultaSql, cb);
 };
 
+// Al crear la competencia se verifica que existan al menos dos películas que cumplan con los requisitos planteados
+// por la misma, para poder crear la competencia.
+Competencia.validacionDeCompetencia = function(competenciaInfo, cb){
+  var consultaSql = `SELECT titulo FROM pelicula INNER JOIN actor_pelicula aa ON aa.pelicula_id = pelicula.id INNER JOIN director_pelicula dd ON dd.pelicula_id = pelicula.id WHERE 1 = 1`;
+  if (competenciaInfo.genero !== null) { consultaSql += ` AND pelicula.genero_id = "${competenciaInfo.genero}"` };
+  if (competenciaInfo.director !== null) { consultaSql += ` AND  dd.director_id = ${competenciaInfo.director}` };
+  if (competenciaInfo.actor !== null) { consultaSql += ` AND aa.actor_id = ${competenciaInfo.actor}` };
+  conexion.query(consultaSql, cb);
+};
+
 Competencia.eliminarVotos = function(idCompetencia, cb){
   var consultaSql = `DELETE FROM voto WHERE competencia_id = ${idCompetencia}`;
   conexion.query(consultaSql, cb);
