@@ -10,13 +10,18 @@ Competencia.obtenerTodas = function(cb){
   conexion.query(consultaSql, cb);
 };
 
-Competencia.obtenerOpciones = function(cb){
-  var consultaSql = "SELECT id, poster, titulo from pelicula ORDER BY RAND() LIMIT 2";
+Competencia.obtenerCamposCompetencia = function(id, cb){
+  var consultaSql = `SELECT nombre, genero_id, director_id, actor_id FROM competencia WHERE id = ${id}`;
   conexion.query(consultaSql, cb);
 };
 
-Competencia.obtenerNombreCompetencia = function(id, cb){
-  var consultaSql = `SELECT nombre FROM competencia WHERE id = ${id}`;
+Competencia.obtenerPeliculasParaVotar = function(competenciaInfo, cb){
+  var consultaSql = `SELECT pelicula.id, poster, titulo FROM pelicula INNER JOIN actor_pelicula aa ON aa.pelicula_id = pelicula.id INNER JOIN director_pelicula dd ON dd.pelicula_id = pelicula.id WHERE 1 = 1`;
+  if (competenciaInfo.genero !== null) { consultaSql += ` AND pelicula.genero_id = ${competenciaInfo.genero}` };
+  if (competenciaInfo.director !== null) { consultaSql += ` AND  dd.director_id = ${competenciaInfo.director}` };
+  if (competenciaInfo.actor !== null) { consultaSql += ` AND aa.actor_id = ${competenciaInfo.actor}` };
+  consultaSql += ` ORDER BY RAND() LIMIT 2`;
+
   conexion.query(consultaSql, cb);
 };
 
@@ -47,8 +52,6 @@ Competencia.obtenerActores = function(cb){
 
 Competencia.agregarCompetencia = function(competenciaInfo, cb){
   var consultaSql = `INSERT INTO competencia (nombre, genero_id, director_id, actor_id) VALUES ('${competenciaInfo.nombre}', ${competenciaInfo.genero}, ${competenciaInfo.director}, ${competenciaInfo.actor})`;
-  //var consultaSql = `INSERT INTO competencia (nombre) VALUES ('${competenciaInfo.nombre}')`;
-  console.log(consultaSql);
   conexion.query(consultaSql, cb);
 };
 
@@ -61,7 +64,7 @@ Competencia.verificaExistenciaCompetencia = function(nombre, cb){
 // por la misma, para poder crear la competencia.
 Competencia.validacionDeCompetencia = function(competenciaInfo, cb){
   var consultaSql = `SELECT titulo FROM pelicula INNER JOIN actor_pelicula aa ON aa.pelicula_id = pelicula.id INNER JOIN director_pelicula dd ON dd.pelicula_id = pelicula.id WHERE 1 = 1`;
-  if (competenciaInfo.genero !== null) { consultaSql += ` AND pelicula.genero_id = "${competenciaInfo.genero}"` };
+  if (competenciaInfo.genero !== null) { consultaSql += ` AND pelicula.genero_id = "${competenciaInfo.genero}` };
   if (competenciaInfo.director !== null) { consultaSql += ` AND  dd.director_id = ${competenciaInfo.director}` };
   if (competenciaInfo.actor !== null) { consultaSql += ` AND aa.actor_id = ${competenciaInfo.actor}` };
   conexion.query(consultaSql, cb);

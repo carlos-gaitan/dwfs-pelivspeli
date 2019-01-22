@@ -10,59 +10,29 @@ function obtenerCompetencias(req, res) {
   });
 };
 
-// function obtenerOpciones(req, res) {
-//   Competencia.obtenerOpciones(function(error, resultadoOpciones){
-//     if (error){
-//       return res.status(500).json("error en el servidor");
-//     };
-//     Competencia.obtenerNombreCompetencia(req.params.id, function(error, resultadoNombreCompetencia){
-//       if (error){
-//         return res.status(500).json("error en el servidor");
-//       };
-//       if (resultadoNombreCompetencia.length == 0){
-//         return res.status(404).json("No se encontro ninguna competencia con ese id");
-//       };
-//       res.json({ peliculas: resultadoOpciones, competencia: resultadoNombreCompetencia[0].nombre });
-//     });
-//   });
-// };
-
-function obtenerOpciones (req, res) {
-        var idCompetencia = req.params.id;
-        var queryCompetencia = "SELECT nombre, genero_id, director_id, actor_id FROM competencia WHERE id = " + idCompetencia + ";";
-        conexion.query(queryCompetencia, function(error, competencia, fields){
-            if (error) {
-                console.log("Hubo un error en la consulta", error.message);
-                return res.status(500).send("Hubo un error en la consulta");
-            }
-
-            var queryPeliculas = "SELECT DISTINCT pelicula.id, poster, titulo, genero_id FROM pelicula LEFT JOIN actor_pelicula ON pelicula.id = actor_pelicula.pelicula_id LEFT JOIN director_pelicula ON pelicula.id = director_pelicula.pelicula_id WHERE 1 = 1";
-            var genero = competencia[0].genero_id;
-            var actor = competencia[0].actor_id;
-            var director = competencia[0].director_id;
-            var queryGenero = genero ? ' AND pelicula.genero_id = '  + genero : '';
-            var queryActor = actor ? ' AND actor_pelicula.actor_id = ' + actor : '';
-            var queryDirector = director ? ' AND director_pelicula.director_id = ' + director : '';
-            var randomOrder = ' ORDER BY RAND() LIMIT 2';
-
-            var query = queryPeliculas + queryGenero + queryActor + queryDirector + randomOrder;
-
-            con.query(query, function(error, peliculas, fields){
-                if (error) {
-                    console.log("Hubo un error en la consulta", error.message);
-                    return res.status(500).send("Hubo un error en la consulta");
-                }
-
-               var response = {
-                    'peliculas': peliculas,
-                    'competencia': competencia[0].nombre
-                };
-
-                //res.send(JSON.stringify(response));
-                res.json(response);
-            });
-        });
+function obtenerOpciones(req, res) {
+  Competencia.obtenerCamposCompetencia(req.params.id, function(error, camposCompetencia){
+    if (error){
+      return res.status(500).json("error en el servidor");
     };
+    if (camposCompetencia.length == 0){
+      return res.status(404).json("No se encontro ninguna competencia con ese id");
+    };
+    var objetoCompetencia = {
+			    nombre: camposCompetencia[0].nombre,
+			    actor: camposCompetencia[0].actor_id,
+          director: camposCompetencia[0].director_id,
+          genero: camposCompetencia[0].genero_id
+		    };
+
+    Competencia.obtenerPeliculasParaVotar(objetoCompetencia, function(error, resultadoPeliculasParaVotar){
+      if (error){
+        return res.status(500).json("error en el servidor");
+      };
+      res.json({ peliculas: resultadoPeliculasParaVotar, competencia: objetoCompetencia.nombre });
+    });
+  });
+};
 
 function votar(req, res){
   Competencia.votar(req.params.id, req.body.idPelicula, function(error, resultadoQuery){
@@ -135,10 +105,11 @@ function agregarCompetencia(req, res){
     };
     var competenciaInfo = {
       nombre: req.body.nombre,
-      genero: req.body.genero === '0' ? null : req.body.genero,
-      director: req.body.director === '0' ? null : req.body.director,
-      actor: req.body.actor === '0' ? null : req.body.actor
+      genero: req.body.genero == 0 ? null : req.body.genero,
+      director: req.body.director == 0 ? null : req.body.director,
+      actor: req.body.actor == 0 ? null : req.body.actor
     };
+    console.log(competenciaInfo);
     Competencia.validacionDeCompetencia(competenciaInfo, function(error, resultadoValidacionDeCompetencia){
       if (error){
         return res.status(500).json("error en el servidor");
@@ -146,6 +117,7 @@ function agregarCompetencia(req, res){
       if (resultadoValidacionDeCompetencia.length < 2) {
         return res.status(422).json("Al menos deben existir dos películas que cumplan con los requisitos planteados por la competencia");
       };
+
       Competencia.agregarCompetencia(competenciaInfo, function(error, resultadoQuery){
         if (error) {
           return res.status(500).json("error en el servidor");
