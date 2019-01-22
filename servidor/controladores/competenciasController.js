@@ -24,7 +24,6 @@ function obtenerOpciones(req, res) {
           director: camposCompetencia[0].director_id,
           genero: camposCompetencia[0].genero_id
 		    };
-
     Competencia.obtenerPeliculasParaVotar(objetoCompetencia, function(error, resultadoPeliculasParaVotar){
       if (error){
         return res.status(500).json("error en el servidor");
@@ -98,7 +97,7 @@ function obtenerActores(req, res) {
 function agregarCompetencia(req, res){
   Competencia.verificaExistenciaCompetencia(req.body.nombre, function(error, resultadoExistenciaCompetencia){
     if (error){
-      return res.status(500).json("error en el servidor");
+      return res.status(500).json("error en el servidor #1");
     };
     if (resultadoExistenciaCompetencia.length > 0) {
       return res.status(422).json("Ya existe una competencia con ese nombre");
@@ -109,10 +108,9 @@ function agregarCompetencia(req, res){
       director: req.body.director == 0 ? null : req.body.director,
       actor: req.body.actor == 0 ? null : req.body.actor
     };
-    console.log(competenciaInfo);
     Competencia.validacionDeCompetencia(competenciaInfo, function(error, resultadoValidacionDeCompetencia){
       if (error){
-        return res.status(500).json("error en el servidor");
+        return res.status(500).json("error en el servidor #2");
       };
       if (resultadoValidacionDeCompetencia.length < 2) {
         return res.status(422).json("Al menos deben existir dos películas que cumplan con los requisitos planteados por la competencia");
@@ -120,7 +118,7 @@ function agregarCompetencia(req, res){
 
       Competencia.agregarCompetencia(competenciaInfo, function(error, resultadoQuery){
         if (error) {
-          return res.status(500).json("error en el servidor");
+          return res.status(500).json("error en el servidor #3");
         };
         res.status(200).json("la competencia se agrego satisfactoriamente");
       });

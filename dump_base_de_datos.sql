@@ -102,9 +102,9 @@ CREATE TABLE `competencia` (
   `director_id` INT (11) UNSIGNED,
   `actor_id` INT (11) UNSIGNED,
   PRIMARY KEY (`id`),
-  FOREIGN KEY (genero_id) REFERENCES genero(id),
-  FOREIGN KEY (director_id) REFERENCES director(id),
-  FOREIGN KEY (actor_id) REFERENCES actor(id)
+  FOREIGN KEY (`genero_id`) REFERENCES `genero` (`id`),
+  FOREIGN KEY (`director_id`) REFERENCES `director` (`id`),
+  FOREIGN KEY (`actor_id`) REFERENCES `actor` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 LOCK TABLES `competencia` WRITE;
